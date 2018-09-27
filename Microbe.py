@@ -1,0 +1,3 @@
+
+class Microbe:
+	pass
