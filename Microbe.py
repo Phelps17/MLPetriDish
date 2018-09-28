@@ -3,10 +3,12 @@ import random
 import Constants
 from VisionLine import VisionLine
 
-class Microbe:
+class Microbe :
 
 	# Initializer
 	def __init__(self, xLocation, yLocation):
+		self.setLocation(xLocation, yLocation)
+
 		# Build needed pieces
 		self.rotation = random.randint(0,359)
 		self.addVisionField()
@@ -20,8 +22,15 @@ class Microbe:
 		self.name = self.clan + (random.randint(900,1000) * 1000000)
 		self.generateRace()
 
-		# Place in dish
-		self.setLocation(xLocation, yLocation)
+	def setLocation(self, xLocation, yLocation):
+		self.xLocation = xLocation
+		self.yLocation = yLocation
+
+	def getMyX(self):
+		return self.xLocation
+
+	def getMyY(self):
+		return self.yLocation
 		
 	def setParents(self, parent1, parent2):
 		# Adjust Lineage
@@ -37,34 +46,23 @@ class Microbe:
 		self.gPigment = ((parent1.getgPigment() + parent2.getgPigment()) / 2)
 		self.bPigment = ((parent1.getbPigment() + parent2.getbPigment()) / 2)
 
-
-	def setLocation(self, xLocation, yLocation):
-		self.xLocation = xLocation
-		self.yLocation = yLocation
-
 	def addVisionField(self):
-		self.vision_field_distance = random.uniform(0, 1) * Constants.MICROBE_MAX_VISION_FIELD
+		self.vision_field_distance = random.uniform(Constants.MICROBE_RADIUS, Constants.MICROBE_MAX_VISION_FIELD)
 		self.setVisionField()
 
 	def setVisionField(self):
-		self.sight1 = VisionLine(self, (Constants.MICROBE_RADIUS_DEFAULT*self.vision_field_distance*math.cos(math.radians(self.rotation-25))), (Constants.MICROBE_RADIUS_DEFAULT*self.vision_field_distance*math.sin(math.radians(self.rotation-25))))
-		self.sight2 = VisionLine(self, (Constants.MICROBE_RADIUS_DEFAULT*self.vision_field_distance*math.cos(math.radians(self.rotation-45))), (Constants.MICROBE_RADIUS_DEFAULT*self.vision_field_distance*math.sin(math.radians(self.rotation-45))))
-		self.sight3 = VisionLine(self, (Constants.MICROBE_RADIUS_DEFAULT*self.vision_field_distance*math.cos(math.radians(self.rotation-60))), (Constants.MICROBE_RADIUS_DEFAULT*self.vision_field_distance*math.sin(math.radians(self.rotation-60))))
-		self.sight4 = VisionLine(self, (Constants.MICROBE_RADIUS_DEFAULT*self.vision_field_distance*math.cos(math.radians(self.rotation-90))), (Constants.MICROBE_RADIUS_DEFAULT*self.vision_field_distance*math.sin(math.radians(self.rotation-90))))
-		self.sight5 = VisionLine(self, (Constants.MICROBE_RADIUS_DEFAULT*self.vision_field_distance*math.cos(math.radians(self.rotation-115))), (Constants.MICROBE_RADIUS_DEFAULT*self.vision_field_distance*math.sin(math.radians(self.rotation-120))))
-		self.sight6 = VisionLine(self, (Constants.MICROBE_RADIUS_DEFAULT*self.vision_field_distance*math.cos(math.radians(self.rotation-135))), (Constants.MICROBE_RADIUS_DEFAULT*self.vision_field_distance*math.sin(math.radians(self.rotation-135))))
-		self.sight7 = VisionLine(self, (Constants.MICROBE_RADIUS_DEFAULT*self.vision_field_distance*math.cos(math.radians(self.rotation-150))), (Constants.MICROBE_RADIUS_DEFAULT*self.vision_field_distance*math.sin(math.radians(self.rotation-155))))
+		self.sight1 = VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-25))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-25))))
+		self.sight2 = VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-45))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-45))))
+		self.sight3 = VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-60))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-60))))
+		self.sight4 = VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-90))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-90))))
+		self.sight5 = VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-115))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-120))))
+		self.sight6 = VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-135))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-135))))
+		self.sight7 = VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-150))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-155))))
 
 	def generateRace(self):
 		self.rPigment = random.uniform(0, 1)
 		self.gPigment = random.uniform(0, 1)
 		self.bPigment = random.uniform(0, 1)
-
-	def getMyX(self):
-		return self.xLocation
-
-	def getMyY(self):
-		return self.yLocation
 
 	def getVisionFieldDistance(self):
 		return self.vision_field_distance
