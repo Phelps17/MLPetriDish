@@ -1,13 +1,16 @@
 import math
 import random
-import Constants
+from Constants import Constants
 from VisionLine import VisionLine
+from Entity import Entity
 
-class Microbe :
+class Microbe (Entity):
 
 	# Initializer
 	def __init__(self, xLocation, yLocation):
-		self.setLocation(xLocation, yLocation)
+		super().__init__(xLocation, yLocation)
+		self.setRadius(Constants.MICROBE_RADIUS)
+
 
 		# Build needed pieces
 		self.rotation = random.randint(0,359)
@@ -17,20 +20,10 @@ class Microbe :
 		self.parent1 = None
 		self.parent2 = None
 		self.age = 0
-		self.generation = 0;
+		self.generation = 0
 		self.clan = random.randint(900000,1000000)
 		self.name = self.clan + (random.randint(900,1000) * 1000000)
 		self.generateRace()
-
-	def setLocation(self, xLocation, yLocation):
-		self.xLocation = xLocation
-		self.yLocation = yLocation
-
-	def getMyX(self):
-		return self.xLocation
-
-	def getMyY(self):
-		return self.yLocation
 		
 	def setParents(self, parent1, parent2):
 		# Adjust Lineage
@@ -63,6 +56,7 @@ class Microbe :
 		self.rPigment = random.uniform(0, 1)
 		self.gPigment = random.uniform(0, 1)
 		self.bPigment = random.uniform(0, 1)
+		self.setColor([self.rPigment, self.gPigment, self.bPigment])
 
 	def getVisionFieldDistance(self):
 		return self.vision_field_distance
@@ -79,6 +73,9 @@ class Microbe :
 	def getAge(self):
 		return self.age
 
+	def setAge(self, age):
+		self.age = age
+
 	def getGeneration(self):
 		return self.generation
 
@@ -94,51 +91,51 @@ class Microbe :
 	def getParent2(self):
 		return self.parent2
 
+	def reproduceWith(self, partner):
+		self.setAge(self.getAge() + 1)
+		partner.setAge(self.getAge() + 1)
+
+		baby = Microbe(random.uniform(Constants.MICROBE_RADIUS, Constants.PETRI_DISH_WIDTH), random.uniform(Constants.MICROBE_RADIUS, Constants.PETRI_DISH_HEIGHT))
+		baby.setParents(self, partner)
+		return baby
+
+	def update(self, surroundings) :
+		# TODO check surroundings
+		# TODO turn aroudn and move accordingly
+
+		delta = 0
+
+		for entity in surroundings :
+			if (entity != self) :
+				myX = self.getMyX()
+				myY = self.getMyY()
+				itsX = entity.getMyX()
+				itsY = entity.getMyY()
+
+				delta = math.sqrt(math.abs(Math.pow((myX - itsX), 2) + math.pow((myY - itsY), 2)))
+
+				if (isinstanceof(entity, Microbe)) :
+					if (delta < (2*Constants.MICROBE_RADIUS)) :
+						print(self.getName() + " collided with " + entity.getName() + ". Delta = " + delta)
+						# TODO microbe interaction logic
+				elif (isinstanceof(entity, NonMicrobe)) :
+					print(self.getName() + " collided with an environment entity. Delta = " + delta)
+					# TODO environment interaction logic
+				else :
+					print("Error. Unrecognized entitiy.")
+					exit()
+
 	def toString(self):
 		parentString = ""
 		if (self.getParent1() is None):
-			parentString = "inoculation";
+			parentString = "inoculation"
 		else :
 			parentString = str(self.getParent1().getName()) + " " + str(self.getParent2().getName())
 		
-		myX = str(self.getMyX());
-		myY = str(self.getMyY());
+		myX = str(self.getMyX())
+		myY = str(self.getMyY())
 
-		return "Name: " + str(self.name) +"\nParents: " + parentString + "\nClan: " + str(self.clan) + "\nGeneration: " +  str(self.generation) + "\nAge: " + str(self.age) + "\nRGB: " + str(self.rPigment) + " " + str(self.gPigment) + " " + str(self.bPigment) + "\nCurrent Coordinates: (" + myX + ", " + myY + ")";
-
-microbe1 = Microbe(300, 100)
-microbe2 = Microbe(320, 100)
-microbe3 = Microbe(300, 120)
-microbe4 = Microbe(300, 100)
-microbe4.setParents(microbe1, microbe2)
-microbe5 = Microbe(320, 100)
-microbe5.setParents(microbe2, microbe3)
-microbe6 = Microbe(300, 120)
-microbe6.setParents(microbe4, microbe5)
-#print(microbe.getMyX(), microbe.getMyY())
-#print(microbe.sight1.getVisionX(), microbe.sight1.getVisionY())
-#print(microbe.sight2.getVisionX(), microbe.sight2.getVisionY())
-#print(microbe.sight3.getVisionX(), microbe.sight3.getVisionY())
-#print(microbe.sight4.getVisionX(), microbe.sight4.getVisionY())
-#print(microbe.sight5.getVisionX(), microbe.sight5.getVisionY())
-#print(microbe.sight6.getVisionX(), microbe.sight6.getVisionY())
-#print(microbe.sight7.getVisionX(), microbe.sight7.getVisionY())
-print(microbe1.toString())
-print("========================================================================")
-print(microbe2.toString())
-print("========================================================================")
-print(microbe3.toString())
-print("========================================================================")
-print(microbe4.toString())
-print("========================================================================")
-print(microbe5.toString())
-print("========================================================================")
-print(microbe6.toString())
-
-
-
-
-
+		return "Name: " + str(self.name) +"\nParents: " + parentString + "\nClan: " + str(self.clan) + "\nGeneration: " +  str(self.generation) + "\nAge: " + str(self.age) + "\nRGB: " + str(self.rPigment) + " " + str(self.gPigment) + " " + str(self.bPigment) + "\nCurrent Coordinates: (" + myX + ", " + myY + ")"
 
 
 

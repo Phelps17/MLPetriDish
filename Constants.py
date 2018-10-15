@@ -1,23 +1,30 @@
-# Dish Parameters
-PETRI_DISH_HEIGHT = 600
-PETRI_DISH_WIDTH = 1200
 
-# Movement Parameters
-SHOCK_CLOCK = 20
-RESET_CLOCK = 200
+class Constants:
+	# Dish Parameters
+	PETRI_DISH_HEIGHT = 1200
+	PETRI_DISH_WIDTH = 1200
+	STARTING_FOOD = 10
+	STARTING_SNACKS = 15
+	STARTING_MICROBES = 10
+	STARTING_BOUNCERS = 6
 
-# Microbe Parameters
-MICROBE_RADIUS = 18
-MICROBE_MAX_VISION_FIELD = 3
+	# Movement Parameters
+	SHOCK_CLOCK = 20
+	RESET_CLOCK = 200
 
-# Bouncer Parameters
-BOUNCER_SPEED = 0.02
-BOUNCER_RADIUS = 65
+	# Microbe Parameters
+	MICROBE_RADIUS = 50
+	MICROBE_MAX_VISION_FIELD = 22
 
-# Food Parameters
-FOOD_SPEED = 0.08
-FOOD_RADIUS = 10
+	# Bouncer Parameters
+	BOUNCER_SPEED = 0.02
+	BOUNCER_RADIUS = 120
+	BOUNCER_COLOR = "#003366"
 
-# Snack Parameters
-SNACK_SPEED = 0.04
-SNACK_RADIUS = 5
+	# Food Parameters
+	FOOD_SPEED = 0.08
+	FOOD_RADIUS = 25
+
+	# Snack Parameters
+	SNACK_SPEED = 0.04
+	SNACK_RADIUS = 5

@@ -1,23 +1,22 @@
+from Entity import Entity
+from Microbe import Microbe
+import math
+from Constants import Constants
 
-class NonMicrobe :
+class NonMicrobe (Entity):
 	
 	# Initializer
 	def __init__(self, xLocation, yLocation, radius):
-		self.setLocation(xLocation, yLocation)
+		super().__init__(xLocation, yLocation)
+
 		self.radius = radius
-
-	def setLocation(self, xLocation, yLocation):
-		self.xLocation = xLocation
-		self.yLocation = yLocation
-
-	def getMyX(self):
-		return self.xLocation
-
-	def getMyY(self):
-		return self.yLocation
-
-	def getRadus(self):
-		return self.radius
+		self.dx = 1
+		self.dy = 1
+		self.speed = 0
+		self.shockClock = Constants.SHOCK_CLOCK
+		self.resetClock = Constants.RESET_CLOCK
+		self.lastCollision = None
+		self.alerted = False
 
 	def getTop(self):
 		return (self.getMyY() + self.getRadius())
@@ -31,5 +30,19 @@ class NonMicrobe :
 	def getLeft(self):
 		return (self.getMyX() - self.getRadius())
 
-	def isColliding(self):
-		pass
+	def isAlerted(self):
+		return self.alerted
+
+	def getDx(self):
+		return self.dx
+
+	def getDy(self):
+		return self.dy
+
+	def setDx(self, dx):
+		self.dx = dx
+
+	def setDy(self, dy):
+		self.dy = dy
+
+	

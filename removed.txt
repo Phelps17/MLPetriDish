@@ -1,0 +1,27 @@
+# from nonmicrobe
+
+def isColliding(self, entities):
+		for entity in entities :
+			if (not isinstanceof(entity, Microbe)):
+				if (entity != self):
+					delta = math.sqrt(abs(math.pow((self.getMyX() - entity.getMyX()), 2) + math.pow((self.getMyY() - entity.getMyY()), 2)))
+					if (delta <= (self.getRadius() + entity.getRadius())) :
+						self.alerted = True
+						self.shockClock = Constants.SHOCK_CLOCK
+						
+						if ((entity == self.lastCollision) and not (isinstanceof(self, Bouncer))):
+							self.resetClock -= 1
+							if (self.resetClock <= 0) :
+								self.setLocation(0,0) # TODO
+								self.lastCollision = None
+						else :
+							self.lastCollision = entity
+							self.resetClock = Constants.RESET_CLOCK
+						return True
+
+		if (self.shockClock <= 0) :
+			self.alerted = False
+		else :
+			self.shockClock -= 1
+		return False
+
