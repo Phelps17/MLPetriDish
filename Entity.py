@@ -1,3 +1,5 @@
+from Constants import Constants
+import math
 
 class Entity:
 	def __init__(self, xLocation, yLocation):
@@ -5,10 +7,14 @@ class Entity:
 		self.radius = 0
 		self.speed = 0
 		self.color = 0
+		self.setBorderColor(Constants.BLUE);
 
 	def setLocation(self, xLocation, yLocation):
 		self.xLocation = xLocation
 		self.yLocation = yLocation
+
+	def printLocation(self):
+		print("(",self.getMyX(),",",self.getMyY(),")")
 
 	def getMyX(self):
 		return self.xLocation
@@ -33,3 +39,12 @@ class Entity:
 
 	def setColor(self, color):
 		self.color = color
+
+	def setBorderColor(self, color):
+		self.color = color
+
+	def getBorderColor(self):
+		return self.color
+
+
+

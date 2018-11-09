@@ -10,7 +10,7 @@ class Microbe (Entity):
 	def __init__(self, xLocation, yLocation):
 		super().__init__(xLocation, yLocation)
 		self.setRadius(Constants.MICROBE_RADIUS)
-
+		self.sightLines = []
 
 		# Build needed pieces
 		self.rotation = random.randint(0,359)
@@ -40,17 +40,18 @@ class Microbe (Entity):
 		self.bPigment = ((parent1.getbPigment() + parent2.getbPigment()) / 2)
 
 	def addVisionField(self):
-		self.vision_field_distance = random.uniform(Constants.MICROBE_RADIUS, Constants.MICROBE_MAX_VISION_FIELD)
+		self.vision_field_distance = 1 + (random.uniform(0, 1) * Constants.MICROBE_MAX_VISION_FIELD)
 		self.setVisionField()
 
 	def setVisionField(self):
-		self.sight1 = VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-25))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-25))))
-		self.sight2 = VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-45))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-45))))
-		self.sight3 = VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-60))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-60))))
-		self.sight4 = VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-90))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-90))))
-		self.sight5 = VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-115))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-120))))
-		self.sight6 = VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-135))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-135))))
-		self.sight7 = VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-150))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-155))))
+		self.sightLines = []
+		self.sightLines.append(VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-25))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-25)))))
+		self.sightLines.append(VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-45))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-45)))))
+		self.sightLines.append(VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-60))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-60)))))
+		self.sightLines.append(VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-90))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-90)))))
+		self.sightLines.append(VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-115))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-120)))))
+		self.sightLines.append(VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-135))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-135)))))
+		self.sightLines.append(VisionLine(self, (Constants.MICROBE_RADIUS*self.vision_field_distance*math.cos(math.radians(self.rotation-150))), (Constants.MICROBE_RADIUS*self.vision_field_distance*math.sin(math.radians(self.rotation-155)))))
 
 	def generateRace(self):
 		self.rPigment = random.uniform(0, 1)
@@ -91,6 +92,20 @@ class Microbe (Entity):
 	def getParent2(self):
 		return self.parent2
 
+	def getSightLines(self) :
+		return self.sightLines
+
+	def getSightLineCoordinates(self):
+		coordinates = []
+		for line in self.getSightLines():
+			pair = []
+			microbeCenter = (self.getMyX(), self.getMyY())
+			pair.append(microbeCenter)
+			lineEnd = (line.getVisionX(), line.getVisionY())
+			pair.append(lineEnd)
+			coordinates.append(pair)
+		return coordinates
+
 	def reproduceWith(self, partner):
 		self.setAge(self.getAge() + 1)
 		partner.setAge(self.getAge() + 1)
@@ -112,7 +127,7 @@ class Microbe (Entity):
 				itsX = entity.getMyX()
 				itsY = entity.getMyY()
 
-				delta = math.sqrt(math.abs(Math.pow((myX - itsX), 2) + math.pow((myY - itsY), 2)))
+				delta = math.sqrt(abs(Math.pow((myX - itsX), 2) + math.pow((myY - itsY), 2)))
 
 				if (isinstanceof(entity, Microbe)) :
 					if (delta < (2*Constants.MICROBE_RADIUS)) :
@@ -124,6 +139,14 @@ class Microbe (Entity):
 				else :
 					print("Error. Unrecognized entitiy.")
 					exit()
+
+	def isColliding(self, entities):
+		for entity in entities:
+			if (entity != self) :
+				delta = math.sqrt(abs(math.pow((entity.getMyX() - self.getMyX()), 2) + math.pow((entity.getMyY() - self.getMyX()), 2)))
+				if (delta <= (entity.getRadius() + self.getRadius())):
+					return True
+		return False
 
 	def toString(self):
 		parentString = ""

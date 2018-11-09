@@ -34,3 +34,13 @@ from PetriDish import PetriDish
 petriDish = PetriDish()
 petriDish.setup()
 petriDish.visualizeDish()
+
+#while True:
+#	petriDish.updateDish()
+#	for entity in petriDish.getEntities():
+#		entity.printLocation()
+#	print("=============================")
+
+
+
+
